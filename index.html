@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relief Assistance Application</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+			@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+        body {
+            background-color: #ffffff;
+						  font-family: "Montserrat", sans-serif;
+        }
+        .form-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 2px solid #225aad;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+        }
+        .section-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #225aad;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .form-label {
+            font-size: 0.875rem;
+            margin-bottom: 0.25rem;
+        }
+        .bilingual {
+            font-size: 0.75rem;
+            color: #6c757d;
+        }
+        h5 {
+            color: #1b51a1;
+        }
+				.btn-mains {
+					background-color: #225aad !important;
+					color: #fff !important;
+				}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <div class="text-center mb-4">
+                <h5 class="fw-bold">SIRAJUL HUDA EDUCATIONAL COMPLEX, KUTTIADI</h5>
+                <p class="mb-0">Relief Assistance Application</p>
+                <small class="text-muted">സഹായധന അപേക്ഷാ ഫോറം</small>
+            </div>
+
+            <form id="reliefForm">
+                <!-- Applicant Details -->
+                <div class="section-title">Applicant Details / അപേക്ഷകന്റെ വിവരങ്ങൾ</div>
+
+                <div class="row g-2 mb-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Full Name <span class="text-danger">*</span><br>
+                        <span class="bilingual">പൂർണ്ണ പേര്</span></label>
+                        <input type="text" class="form-control form-control-sm" name="fullName" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Contact Number <span class="text-danger">*</span><br>
+                        <span class="bilingual">ഫോൺ നമ്പർ</span></label>
+                        <input type="tel" class="form-control form-control-sm" name="contactNumber" required>
+                    </div>
+                </div>
+
+                <div class="row g-2 mb-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Gender <span class="text-danger">*</span><br>
+                        <span class="bilingual">ലിംഗം</span></label>
+                        <select class="form-select form-select-sm" name="gender" required>
+                            <option value="">Select</option>
+                            <option value="male">Male / പുരുഷൻ</option>
+                            <option value="female">Female / സ്ത്രീ</option>
+                            <option value="other">Other / മറ്റുള്ളവ</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Number of Family Members <span class="text-danger">*</span><br>
+                        <span class="bilingual">കുടുംബാംഗങ്ങളുടെ എണ്ണം</span></label>
+                        <input type="number" class="form-control form-control-sm" name="familyMembers" min="1" required>
+                    </div>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Address <span class="text-danger">*</span><br>
+                    <span class="bilingual">വിലാസം</span></label>
+                    <textarea class="form-control form-control-sm" name="address" rows="2" required></textarea>
+                </div>
+
+                <div class="row g-2 mb-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Place <span class="text-danger">*</span><br>
+                        <span class="bilingual">സ്ഥലം</span></label>
+                        <input type="text" class="form-control form-control-sm" name="place" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Post <span class="text-danger">*</span><br>
+                        <span class="bilingual">പോസ്റ്റ്</span></label>
+                        <input type="text" class="form-control form-control-sm" name="post" required>
+                    </div>
+                </div>
+
+                <div class="row g-2 mb-2">
+                    <div class="col-md-4">
+                        <label class="form-label">Pin Code <span class="text-danger">*</span><br>
+                        <span class="bilingual">പിൻകോഡ്</span></label>
+                        <input type="text" class="form-control form-control-sm" name="pincode" maxlength="6" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">District <span class="text-danger">*</span><br>
+                        <span class="bilingual">ജില്ല</span></label>
+                        <input type="text" class="form-control form-control-sm" name="district" required>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">State <span class="text-danger">*</span><br>
+                        <span class="bilingual">സംസ്ഥാനം</span></label>
+                        <input type="text" class="form-control form-control-sm" name="state" required>
+                    </div>
+                </div>
+
+                <!-- Relief Details -->
+                <div class="section-title">Relief Details / സഹായത്തിന്റെ വിശദാംശങ്ങൾ</div>
+
+                <div class="mb-2">
+                    <label class="form-label">Reason for Requesting Relief <span class="text-danger">*</span><br>
+                    <span class="bilingual">സഹായം ആവശ്യപ്പെടാനുള്ള കാരണം</span></label>
+                    <textarea class="form-control form-control-sm" name="reason" rows="2" required></textarea>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Type of Relief Needed <span class="text-danger">*</span><br>
+                    <span class="bilingual">ആവശ്യമായ സഹായം</span></label>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" name="reliefType" value="financial" id="financial">
+                                <label class="form-check-label small" for="financial">
+                                    Financial Support / ധനസഹായം
+                                </label>
+                            </div>
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" name="reliefType" value="foodKit" id="foodKit">
+                                <label class="form-check-label small" for="foodKit">
+                                    Food Kit / ഭക്ഷണകിറ്റ്
+                                </label>
+                            </div>
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" name="reliefType" value="medical" id="medical">
+                                <label class="form-check-label small" for="medical">
+                                    Medical Assistance / ചികിത്സാ സഹായം
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" name="reliefType" value="education" id="education">
+                                <label class="form-check-label small" for="education">
+                                    Education Support / വിദ്യാഭ്യാസ സഹായം
+                                </label>
+                            </div>
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" name="reliefType" value="housing" id="housing">
+                                <label class="form-check-label small" for="housing">
+                                    Housing / Repair / വീട് നിർമ്മാണ-പരിപാലന സഹായം
+                                </label>
+                            </div>
+                            <div class="form-check form-check-sm">
+                                <input class="form-check-input" type="checkbox" name="reliefType" value="other" id="other">
+                                <label class="form-check-label small" for="other">
+                                    Other / മറ്റു
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Income Details -->
+                <div class="section-title">Income Details / വരുമാന വിശദാംശങ്ങൾ</div>
+
+                <div class="row g-2 mb-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Occupation <span class="text-danger">*</span><br>
+                        <span class="bilingual">തൊഴിൽ</span></label>
+                        <input type="text" class="form-control form-control-sm" name="occupation" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Monthly Income <span class="text-danger">*</span><br>
+                        <span class="bilingual">മാസ വരുമാനം</span></label>
+                        <input type="text" class="form-control form-control-sm" name="monthlyIncome" required>
+                    </div>
+                </div>
+
+                <!-- Documents -->
+                <div class="section-title">Documents / രേഖകൾ</div>
+
+                <div class="mb-2">
+                    <label class="form-label">ID Proof (Aadhaar) <span class="text-danger">*</span><br>
+                    <span class="bilingual">തിരിച്ചറിയൽ രേഖ</span></label>
+                    <input type="file" class="form-control form-control-sm" name="idProof" accept=".pdf,.jpg,.jpeg,.png" required>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Request Letter <span class="text-danger">*</span><br>
+                    <span class="bilingual">അപേക്ഷാ കത്ത്</span></label>
+                    <input type="file" class="form-control form-control-sm" name="requestLetter" accept=".pdf,.jpg,.jpeg,.png" required>
+                </div>
+
+                <div class="mb-2">
+                    <label class="form-label">Bank Passbook <span class="text-danger">*</span><br>
+                    <span class="bilingual">ബാങ്ക് പാസ്ബുക്ക്</span></label>
+                    <input type="file" class="form-control form-control-sm" name="bankPassbook" accept=".pdf,.jpg,.jpeg,.png" required>
+                </div>
+
+                <!-- Referral -->
+                <div class="section-title">Referred By</div>
+
+                <div class="row g-2 mb-2">
+                    <div class="col-md-6">
+                        <label class="form-label">Name<br>
+                        <span class="bilingual">പേര്</span></label>
+                        <input type="text" class="form-control form-control-sm" name="referrerName">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Mobile Number<br>
+                        <span class="bilingual">മൊബൈൽ നമ്പർ</span></label>
+                        <input type="tel" class="form-control form-control-sm" name="referrerMobile">
+                    </div>
+                </div>
+
+                <!-- Declaration -->
+                <div class="section-title">Declaration / പ്രഖ്യാപനം</div>
+
+                <div class="mb-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="declaration" required>
+                        <label class="form-check-label small" for="declaration">
+                            I hereby declare that the above information is true and correct.<br>
+                            <span class="bilingual">മുകളിൽ നൽകിയ വിവരങ്ങൾ ശരിയായതും യഥാർത്ഥവുമാണെന്ന് ഞാൻ ഇവിടെ പ്രഖ്യാപിക്കുന്നു.</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Date <span class="text-danger">*</span></label>
+                    <input type="date" class="form-control form-control-sm" name="date" style="max-width: 200px;" required>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-mains btn-sm px-4">SUBMIT / സമർപ്പിക്കുക</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('reliefForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const reliefTypes = document.querySelectorAll('input[name="reliefType"]:checked');
+            if (reliefTypes.length === 0) {
+                alert('Please select at least one type of relief needed.');
+                return;
+            }
+            
+            alert('Form submitted successfully!');
+        });
+
+        document.querySelector('input[name="date"]').valueAsDate = new Date();
+    </script>
+</body>
+</html>
