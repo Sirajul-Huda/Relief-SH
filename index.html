@@ -239,8 +239,9 @@
 			100% { width: 47px; right: 8px; top: 38px; }
 		}
 
-		/* Other Status Input Animation */
-		#otherStatusContainer {
+		/* Conditional Input Animation */
+		#otherStatusContainer,
+		#familyMembersContainer {
 			max-height: 0;
 			overflow: hidden;
 			opacity: 0;
@@ -248,7 +249,8 @@
 			margin-top: 0;
 		}
 
-		#otherStatusContainer.show {
+		#otherStatusContainer.show,
+		#familyMembersContainer.show {
 			max-height: 100px;
 			opacity: 1;
 			margin-top: 12px;
@@ -265,9 +267,9 @@
 					<h5 class="modal-title">Invalid File Type</h5>
 				</div>
 				<div class="modal-body">
-					<p><strong>Only PDF files are supported!</strong></p>
-					<p class="mb-0 text-muted small">Please convert your document to PDF format and try again.</p>
-					<p class="mb-0 text-muted small">കേവലം PDF ഫയലുകൾ മാത്രമേ സ്വീകരിക്കുകയുള്ളൂ</p>
+					<p><strong>Only PDF files and Images are supported!</strong></p>
+					<p class="mb-0 text-muted small">Please upload a PDF or image file (JPG, PNG, etc.)</p>
+					<p class="mb-0 text-muted small">PDF അല്ലെങ്കിൽ ഇമേജ് ഫയലുകൾ മാത്രമേ സ്വീകരിക്കുകയുള്ളൂ</p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary btn-sm" onclick="closeFileErrorModal()">OK</button>
@@ -340,10 +342,6 @@
 							<option value="Other">Other / മറ്റുള്ളവ</option>
 						</select>
 					</div>
-					<div class="col-md-6">
-						<label class="form-label">Number of Family Members <span class="text-danger">*</span><br><span class="bilingual">കുടുംബാംഗങ്ങളുടെ എണ്ണം</span></label>
-						<input type="number" class="form-control form-control-sm" name="family_members" min="1" required>
-					</div>
 				</div>
 
 				<div class="mb-2">
@@ -380,12 +378,11 @@
 						<select class="form-select form-select-sm" id="stateSelect" name="state" required>
 							<option value="">Select State</option>
 							<option value="Kerala" selected>Kerala</option>
-							<!-- Add other states if needed -->
 						</select>
 					</div>
 				</div>
 
-				<!-- NEW: Status of Applicant -->
+				<!-- Status of Applicant -->
 				<div class="section-title">Status of Applicant / അപേക്ഷകന്റെ നില</div>
 				<div class="mb-3">
 					<label class="form-label">Select Applicant's Status <span class="text-danger">*</span><br>
@@ -422,11 +419,31 @@
 					</div>
 
 					<!-- Other Status Input -->
-					<div id="otherStatusContainer" class="mt-3">
+					<div id="otherStatusContainer">
 						<label class="form-label">Specify Other Status <span class="text-danger">*</span><br>
 							<span class="bilingual">മറ്റ് നില വ്യക്തമാക്കുക</span></label>
 						<input type="text" class="form-control form-control-sm" id="otherStatusInput" 
 							placeholder="e.g. Divorced, Disabled, Senior Citizen, etc." name="other_applicant_status">
+					</div>
+
+					<!-- Family Members Input (only shown when Family is checked) -->
+					<div id="familyMembersContainer">
+						<label class="form-label">Number of Family Members <span class="text-danger">*</span><br>
+							<span class="bilingual">കുടുംബാംഗങ്ങളുടെ എണ്ണം</span></label>
+						<input type="number" class="form-control form-control-sm" id="familyMembersInput" name="family_members" min="1">
+					</div>
+				</div>
+
+				<!-- Income Details -->
+				<div class="section-title">Income Details / വരുമാന വിശദാംശങ്ങൾ</div>
+				<div class="row g-2 mb-2">
+					<div class="col-md-6">
+						<label class="form-label">Occupation <span class="text-danger">*</span><br><span class="bilingual">തൊഴിൽ</span></label>
+						<input type="text" class="form-control form-control-sm" name="occupation" required>
+					</div>
+					<div class="col-md-6">
+						<label class="form-label">Monthly Income <span class="text-danger">*</span><br><span class="bilingual">മാസ വരുമാനം</span></label>
+						<input type="number" class="form-control form-control-sm" name="monthly_income" step="0.01" required>
 					</div>
 				</div>
 
@@ -486,35 +503,22 @@
 					</div>
 				</div>
 
-				<!-- Income Details -->
-				<div class="section-title">Income Details / വരുമാന വിശദാംശങ്ങൾ</div>
-				<div class="row g-2 mb-2">
-					<div class="col-md-6">
-						<label class="form-label">Occupation <span class="text-danger">*</span><br><span class="bilingual">തൊഴിൽ</span></label>
-						<input type="text" class="form-control form-control-sm" name="occupation" required>
-					</div>
-					<div class="col-md-6">
-						<label class="form-label">Monthly Income <span class="text-danger">*</span><br><span class="bilingual">മാസ വരുമാനം</span></label>
-						<input type="number" class="form-control form-control-sm" name="monthly_income" step="0.01" required>
-					</div>
-		</div>
-
 				<!-- Documents -->
 				<div class="section-title">Documents / രേഖകൾ</div>
 				<div class="mb-2">
 					<label class="form-label">ID Proof (Aadhaar) <span class="text-danger">*</span><br><span class="bilingual">തിരിച്ചറിയൽ രേഖ</span></label>
-					<input type="file" class="form-control form-control-sm" id="idProofFile" name="id_proof" accept=".pdf" required>
-					<small class="text-danger">Only PDF files are allowed</small>
+					<input type="file" class="form-control form-control-sm" id="idProofFile" name="id_proof" accept=".pdf,image/*" capture="environment" required>
+					<small class="text-muted">Upload PDF or take/upload a photo</small>
 				</div>
 				<div class="mb-2">
 					<label class="form-label">Request Letter <span class="text-danger">*</span><br><span class="bilingual">അപേക്ഷാ കത്ത്</span></label>
-					<input type="file" class="form-control form-control-sm" id="requestLetterFile" name="request_letter" accept=".pdf" required>
-					<small class="text-danger">Only PDF files are allowed</small>
+					<input type="file" class="form-control form-control-sm" id="requestLetterFile" name="request_letter" accept=".pdf,image/*" capture="environment" required>
+					<small class="text-muted">Upload PDF or take/upload a photo</small>
 				</div>
 				<div class="mb-2">
 					<label class="form-label">Bank Passbook <span class="text-danger">*</span><br><span class="bilingual">ബാങ്ക് പാസ്ബുക്ക്</span></label>
-					<input type="file" class="form-control form-control-sm" id="bankPassbookFile" name="bank_passbook" accept=".pdf" required>
-					<small class="text-danger">Only PDF files are allowed</small>
+					<input type="file" class="form-control form-control-sm" id="bankPassbookFile" name="bank_passbook" accept=".pdf,image/*" capture="environment" required>
+					<small class="text-muted">Upload PDF or take/upload a photo</small>
 				</div>
 
 				<!-- Referral -->
@@ -582,14 +586,36 @@
 			}
 		});
 
+		// === Family Members Input Show/Hide ===
+		const familyStatusCheckbox = document.getElementById('statusFamily');
+		const familyMembersContainer = document.getElementById('familyMembersContainer');
+		const familyMembersInput = document.getElementById('familyMembersInput');
+
+		familyStatusCheckbox.addEventListener('change', function () {
+			if (this.checked) {
+				familyMembersContainer.classList.add('show');
+				familyMembersInput.setAttribute('required', 'required');
+				setTimeout(() => familyMembersInput.focus(), 300);
+			} else {
+				familyMembersContainer.classList.remove('show');
+				familyMembersInput.removeAttribute('required');
+				familyMembersInput.value = '';
+			}
+		});
+
 		// === File Validation ===
 		const fileInputs = ['idProofFile', 'requestLetterFile', 'bankPassbookFile'];
 		fileInputs.forEach(id => {
 			document.getElementById(id).addEventListener('change', function (e) {
 				const file = e.target.files[0];
-				if (file && !file.type.includes('pdf') && !file.name.toLowerCase().endsWith('.pdf')) {
-					showFileErrorModal();
-					e.target.value = '';
+				if (file) {
+					const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+					const isImage = file.type.startsWith('image/');
+					
+					if (!isPdf && !isImage) {
+						showFileErrorModal();
+						e.target.value = '';
+					}
 				}
 			});
 		});
@@ -671,6 +697,13 @@
 				return;
 			}
 
+			// Validate Family Members if Family is checked
+			if (familyStatusCheckbox.checked && !familyMembersInput.value) {
+				showAlert('Please enter the number of family members.', 'danger');
+				familyMembersInput.focus();
+				return;
+			}
+
 			// Validate Relief Types
 			const reliefTypes = document.querySelectorAll('input[name="reliefType"]:checked');
 			if (reliefTypes.length === 0) {
@@ -679,11 +712,16 @@
 			}
 
 			const formData = new FormData();
-			const fields = ['full_name', 'gender', 'family_members', 'address', 'place', 'post', 'pin_code', 'district', 'state', 'reason', 'occupation', 'monthly_income', 'referrer_name'];
+			const fields = ['full_name', 'gender', 'address', 'place', 'post', 'pin_code', 'district', 'state', 'reason', 'occupation', 'monthly_income', 'referrer_name'];
 			fields.forEach(f => {
 				const el = this.elements[f];
 				if (el && el.value) formData.append(f, el.value);
 			});
+
+			// Family Members (only if Family checkbox is checked)
+			if (familyStatusCheckbox.checked && familyMembersInput.value) {
+				formData.append('family_members', familyMembersInput.value);
+			}
 
 			// Contact & Referrer
 			if (this.elements['contact_number'].value) formData.append('contact_number', '+91' + this.elements['contact_number'].value);
@@ -723,6 +761,7 @@
 					this.reset();
 					document.querySelector('input[name="application_date"]').valueAsDate = new Date();
 					otherStatusContainer.classList.remove('show');
+					familyMembersContainer.classList.remove('show');
 				} else {
 					showAlert('Error: ' + (data.message || 'Submission failed'), 'danger');
 				}
