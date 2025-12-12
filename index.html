@@ -8,65 +8,282 @@
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+		@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+		:root {
+			--primary-color: #1e3a8a;
+			--secondary-color: #3b82f6;
+			--accent-color: #60a5fa;
+			--success-color: #10b981;
+			--danger-color: #ef4444;
+			--warning-color: #f59e0b;
+			--light-bg: #f8fafc;
+			--white: #ffffff;
+			--gray-100: #f3f4f6;
+			--gray-200: #e5e7eb;
+			--gray-300: #d1d5db;
+			--gray-400: #9ca3af;
+			--gray-500: #6b7280;
+			--gray-600: #4b5563;
+			--gray-700: #374151;
+			--gray-800: #1f2937;
+			--gray-900: #111827;
+			--shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+			--shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+			--shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+			--shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+			--shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
 
 		body {
-			background-image: url(./bg.64b49021a7d9ba478f31.png);
-			background-repeat: no-repeat;
-			background-size: cover;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			background-attachment: fixed;
 			min-height: 100vh;
 			font-family: "Montserrat", sans-serif;
+			position: relative;
+			overflow-x: hidden;
+		}
+
+		body::before {
+			content: '';
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: url(./bg.64b49021a7d9ba478f31.png);
+			background-size: cover;
+			background-position: center;
+			opacity: 0.1;
+			z-index: -1;
+		}
+
+		.floating-shapes {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			overflow: hidden;
+			z-index: -1;
+			pointer-events: none;
+		}
+
+		.shape {
+			position: absolute;
+			background: rgba(255, 255, 255, 0.1);
+			backdrop-filter: blur(5px);
+			border-radius: 50%;
+			animation: float 20s infinite ease-in-out;
+		}
+
+		.shape:nth-child(1) {
+			width: 80px;
+			height: 80px;
+			left: 10%;
+			top: 20%;
+			animation-delay: 0s;
+		}
+
+		.shape:nth-child(2) {
+			width: 120px;
+			height: 120px;
+			right: 20%;
+			top: 60%;
+			animation-delay: 2s;
+		}
+
+		.shape:nth-child(3) {
+			width: 60px;
+			height: 60px;
+			left: 30%;
+			bottom: 20%;
+			animation-delay: 4s;
+		}
+
+		@keyframes float {
+			0%, 100% {
+				transform: translateY(0) rotate(0deg);
+			}
+			50% {
+				transform: translateY(-20px) rotate(180deg);
+			}
+		}
+
+		.container {
+			margin-top: 80px;
+			padding: 0 15px;
 		}
 
 		.siraj-logo {
-			width: 150px !important;
+			width: 180px !important;
 			margin: auto;
 			display: table;
-			padding-bottom: 25px;
+			padding-bottom: 30px;
+			filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+			animation: fadeInDown 0.8s ease-out;
 		}
-		.container{
-			margin-top: 150px;
-		}
+
 		.form-container {
-			max-width: 800px;
+			max-width: 900px;
 			margin: 20px auto;
-			padding: 20px;
-			border: 2px solid #225aad;
-			background-color: #fff;
-			border-radius: 8px;
-			box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+			padding: 40px;
+			background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.9) 100%);
+			backdrop-filter: blur(20px);
+			border-radius: 20px;
+			box-shadow: var(--shadow-2xl);
+			border: 1px solid rgba(255, 255, 255, 0.3);
+			animation: fadeInUp 0.8s ease-out;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.form-container::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 4px;
+			background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+		}
+
+		@keyframes fadeInDown {
+			from {
+				opacity: 0;
+				transform: translateY(-30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes fadeInUp {
+			from {
+				opacity: 0;
+				transform: translateY(30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
+
+		@keyframes slideInLeft {
+			from {
+				opacity: 0;
+				transform: translateX(-30px);
+			}
+			to {
+				opacity: 1;
+				transform: translateX(0);
+			}
+		}
+
+		.text-center {
+			animation: fadeInDown 0.8s ease-out;
+		}
+
+		h5 {
+			color: var(--primary-color);
+			font-weight: 700;
+			margin-bottom: 10px;
+		}
+
+		p {
+			color: var(--gray-600);
+			margin-bottom: 5px;
 		}
 
 		.section-title {
-			font-size: 0.875rem;
-			font-weight: 600;
-			color: #225aad;
-			margin-top: 1.5rem;
-			margin-bottom: 0.75rem;
+			font-size: 0.95rem;
+			font-weight: 700;
+			color: var(--primary-color);
+			margin-top: 2.5rem;
+			margin-bottom: 1.5rem;
 			text-transform: uppercase;
-			letter-spacing: 0.5px;
+			letter-spacing: 1px;
+			position: relative;
+			padding-left: 15px;
+			animation: slideInLeft 0.6s ease-out;
+		}
+
+		.section-title::before {
+			content: '';
+			position: absolute;
+			left: 0;
+			top: 50%;
+			transform: translateY(-50%);
+			width: 5px;
+			height: 20px;
+			background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
+			border-radius: 3px;
+		}
+
+		.section-title:first-child {
+			margin-top: 1rem;
 		}
 
 		.form-label {
 			font-size: 0.875rem;
-			margin-bottom: 0.25rem;
+			margin-bottom: 0.5rem;
+			font-weight: 600;
+			color: var(--gray-700);
 		}
 
 		.bilingual {
 			font-size: 0.75rem;
-			color: #6c757d;
-		}
-
-		h5 {
-			color: #1b51a1;
+			color: var(--gray-500);
+			font-weight: 400;
 		}
 
 		.btn-mains {
-			background-color: #225aad !important;
+			background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)) !important;
 			color: #fff !important;
+			border: none;
+			padding: 12px 30px;
+			font-weight: 600;
+			letter-spacing: 0.5px;
+			border-radius: 10px;
+			box-shadow: var(--shadow-md);
+			transition: all 0.3s ease;
+			text-transform: uppercase;
+		}
+
+		.btn-mains:hover {
+			transform: translateY(-2px);
+			box-shadow: var(--shadow-lg);
+			background: linear-gradient(135deg, var(--secondary-color), var(--primary-color)) !important;
 		}
 
 		.alert {
 			font-size: 0.875rem;
+			border-radius: 10px;
+			border: none;
+			box-shadow: var(--shadow-sm);
+			animation: slideInLeft 0.4s ease-out;
+		}
+
+		.alert-success {
+			background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+			color: var(--success-color);
+		}
+
+		.alert-danger {
+			background: linear-gradient(135deg, #fee2e2, #fecaca);
+			color: var(--danger-color);
+		}
+
+		.alert-info {
+			background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+			color: var(--secondary-color);
 		}
 
 		.spinner-border-sm {
@@ -74,15 +291,124 @@
 			height: 1rem;
 		}
 
+		/* Form Elements Styling */
+		.form-control,
+		.form-select {
+			border: 2px solid var(--gray-200);
+			border-radius: 10px;
+			padding: 10px 15px;
+			font-size: 0.875rem;
+			transition: all 0.3s ease;
+			background-color: var(--white);
+			box-shadow: var(--shadow-sm);
+		}
+
+		.form-control:focus,
+		.form-select:focus {
+			border-color: var(--secondary-color);
+			box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1), var(--shadow-md);
+			outline: none;
+			transform: translateY(-1px);
+		}
+
+		.form-control:hover,
+		.form-select:hover {
+			border-color: var(--gray-300);
+		}
+
+		.input-group-text {
+			background: linear-gradient(135deg, var(--gray-100), var(--gray-200));
+			border: 2px solid var(--gray-200);
+			border-radius: 10px 0 0 10px;
+			color: var(--gray-700);
+			font-weight: 600;
+		}
+
+		.form-check-input {
+			width: 1.2rem;
+			height: 1.2rem;
+			border: 2px solid var(--gray-300);
+			transition: all 0.3s ease;
+		}
+
+		.form-check-input:checked {
+			background-color: var(--secondary-color);
+			border-color: var(--secondary-color);
+			transform: scale(1.1);
+		}
+
+		.form-check-input:focus {
+			border-color: var(--secondary-color);
+			outline: none;
+			box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+		}
+
+		.form-check-label {
+			cursor: pointer;
+			transition: color 0.3s ease;
+			padding-left: 5px;
+		}
+
+		.form-check-label:hover {
+			color: var(--secondary-color);
+		}
+
+		textarea.form-control {
+			resize: vertical;
+			min-height: 80px;
+		}
+
+		/* File Input Styling */
+		input[type="file"] {
+			border: 2px dashed var(--gray-300);
+			padding: 20px;
+			text-align: center;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			background-color: var(--gray-100);
+		}
+
+		input[type="file"]:hover {
+			border-color: var(--secondary-color);
+			background-color: var(--gray-50);
+		}
+
+		input[type="file"]:focus {
+			border-color: var(--secondary-color);
+			outline: none;
+			box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+		}
+
+		/* Row spacing */
+		.row.g-2 {
+			margin-bottom: 15px;
+		}
+
+		.row.g-3 {
+			margin-bottom: 20px;
+		}
+
+		/* Enhanced Modal Styles */
 		.modal {
 			display: none;
 			position: fixed;
-			z-index: 1050;
+			z-index: 9999;
 			left: 0;
 			top: 0;
 			width: 100%;
 			height: 100%;
-			background-color: rgba(0, 0, 0, 0.5);
+			background: rgba(0, 0, 0, 0.6);
+			backdrop-filter: blur(5px);
+			animation: fadeIn 0.3s ease-out;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+			}
+			to {
+				opacity: 1;
+			}
 		}
 
 		.modal.show {
@@ -92,41 +418,110 @@
 		}
 
 		.modal-dialog {
-			max-width: 400px;
+			max-width: 450px;
 			margin: 1.75rem auto;
+			animation: slideInUp 0.3s ease-out;
+		}
+
+		@keyframes slideInUp {
+			from {
+				transform: translateY(50px);
+				opacity: 0;
+			}
+			to {
+				transform: translateY(0);
+				opacity: 1;
+			}
 		}
 
 		.modal-content {
-			background-color: #fff;
-			border-radius: 8px;
-			padding: 20px;
-			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+			background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+			border-radius: 20px;
+			padding: 30px;
+			box-shadow: var(--shadow-2xl);
+			border: 1px solid rgba(255, 255, 255, 0.3);
+			overflow: hidden;
+			position: relative;
+		}
+
+		.modal-content::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 4px;
+			background: linear-gradient(90deg, var(--danger-color), var(--warning-color));
 		}
 
 		.modal-header {
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
-			margin-bottom: 15px;
-			padding-bottom: 10px;
-			border-bottom: 1px solid #dee2e6;
+			margin-bottom: 20px;
+			padding-bottom: 15px;
+			border-bottom: 2px solid var(--gray-100);
 		}
 
 		.modal-title {
-			font-size: 1.1rem;
-			font-weight: 600;
-			color: #dc3545;
+			font-size: 1.3rem;
+			font-weight: 700;
+			color: var(--danger-color);
+			margin-bottom: 0;
 		}
 
 		.modal-body {
-			margin-bottom: 15px;
+			margin-bottom: 20px;
+			line-height: 1.6;
+		}
+
+		.modal-body p {
+			color: var(--gray-700);
+			margin-bottom: 10px;
+		}
+
+		.modal-body .text-muted {
+			color: var(--gray-500) !important;
 		}
 
 		.modal-footer {
 			display: flex;
-			justify-content: flex-end;
-			padding-top: 10px;
-			border-top: 1px solid #dee2e6;
+			justify-content: center;
+			padding-top: 20px;
+			border-top: 2px solid var(--gray-100);
+			gap: 10px;
+		}
+
+		.modal-footer .btn {
+			padding: 10px 25px;
+			border-radius: 10px;
+			font-weight: 600;
+			transition: all 0.3s ease;
+		}
+
+		.modal-footer .btn-primary {
+			background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+			border: none;
+		}
+
+		.modal-footer .btn-primary:hover {
+			transform: translateY(-2px);
+			box-shadow: var(--shadow-md);
+		}
+
+		.modal-footer .btn-success {
+			background: linear-gradient(135deg, var(--success-color), #059669);
+			border: none;
+		}
+
+		.modal-footer .btn-success:hover {
+			transform: translateY(-2px);
+			box-shadow: var(--shadow-md);
+		}
+
+		/* Success Modal Special Styles */
+		#successModal .modal-content::before {
+			background: linear-gradient(90deg, var(--success-color), #059669);
 		}
 
 		/* Success Checkmark Animation */
@@ -241,26 +636,218 @@
 			100% { width: 47px; right: 8px; top: 38px; }
 		}
 
-		/* Conditional Input Animation */
+	/* Enhanced Conditional Input Animation */
 		#otherStatusContainer,
 		#familyMembersContainer {
 			max-height: 0;
 			overflow: hidden;
 			opacity: 0;
-			transition: all 0.4s ease;
+			transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 			margin-top: 0;
+			transform: translateY(-10px);
 		}
 
 		#otherStatusContainer.show,
 		#familyMembersContainer.show {
-			max-height: 100px;
+			max-height: 200px;
 			opacity: 1;
-			margin-top: 12px;
+			margin-top: 20px;
+			transform: translateY(0);
+		}
+
+		/* Responsive Design */
+		@media (max-width: 768px) {
+			.container {
+				margin-top: 60px;
+				padding: 0 10px;
+			}
+
+			.form-container {
+				padding: 25px;
+				border-radius: 15px;
+				margin: 10px;
+			}
+
+			.siraj-logo {
+				width: 140px !important;
+				padding-bottom: 20px;
+			}
+
+			h5 {
+				font-size: 1.1rem;
+			}
+
+			.section-title {
+				font-size: 0.85rem;
+				margin-top: 2rem;
+				margin-bottom: 1rem;
+			}
+
+			.form-label {
+				font-size: 0.8rem;
+			}
+
+			.bilingual {
+				font-size: 0.7rem;
+			}
+
+			.btn-mains {
+				padding: 10px 25px;
+				font-size: 0.875rem;
+			}
+
+			.modal-dialog {
+				max-width: 90%;
+				margin: 10px;
+			}
+
+			.modal-content {
+				padding: 20px;
+			}
+
+			.modal-title {
+				font-size: 1.1rem;
+			}
+
+			.form-control,
+			.form-select {
+				padding: 8px 12px;
+				font-size: 0.8rem;
+			}
+
+			.form-check-input {
+				width: 1rem;
+				height: 1rem;
+			}
+
+			.row.g-2 {
+				margin-bottom: 12px;
+			}
+
+			.row.g-3 {
+				margin-bottom: 15px;
+			}
+		}
+
+		@media (max-width: 480px) {
+			.form-container {
+				padding: 20px;
+				border-radius: 12px;
+			}
+
+			.siraj-logo {
+				width: 120px !important;
+				padding-bottom: 15px;
+			}
+
+			h5 {
+				font-size: 1rem;
+			}
+
+			.section-title {
+				font-size: 0.8rem;
+				letter-spacing: 0.5px;
+			}
+
+			.section-title::before {
+				height: 15px;
+				width: 4px;
+			}
+
+			.btn-mains {
+				width: 100%;
+				padding: 12px 20px;
+			}
+
+			.modal-content {
+				padding: 15px;
+			}
+
+			.success-checkmark {
+				width: 60px;
+				height: 60px;
+			}
+
+			.success-checkmark .check-icon {
+				width: 60px;
+				height: 60px;
+			}
+		}
+
+		/* Additional hover effects and interactions */
+		.form-control:hover,
+		.form-select:hover,
+		textarea:hover {
+			box-shadow: var(--shadow-md);
+			transform: translateY(-1px);
+		}
+
+		.input-group:hover .input-group-text {
+			background: linear-gradient(135deg, var(--gray-200), var(--gray-300));
+		}
+
+		/* Add subtle pulse animation to submit button */
+		@keyframes pulse {
+			0% {
+				box-shadow: var(--shadow-md);
+			}
+			50% {
+				box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+			}
+			100% {
+				box-shadow: var(--shadow-md);
+			}
+		}
+
+		.btn-mains:not(:disabled):hover {
+			animation: pulse 2s infinite;
+		}
+
+		/* File input hover text effect */
+		input[type="file"]:hover::after {
+			content: "Click or drag files here";
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			color: var(--secondary-color);
+			font-weight: 600;
+			pointer-events: none;
+		}
+
+		/* Smooth scroll behavior */
+		html {
+			scroll-behavior: smooth;
+		}
+
+		/* Custom scrollbar */
+		::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		::-webkit-scrollbar-track {
+			background: var(--gray-100);
+		}
+
+		::-webkit-scrollbar-thumb {
+			background: linear-gradient(180deg, var(--secondary-color), var(--primary-color));
+			border-radius: 10px;
+		}
+
+		::-webkit-scrollbar-thumb:hover {
+			background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
 		}
 	</style>
 </head>
 
 <body>
+	<!-- Floating Background Shapes -->
+	<div class="floating-shapes">
+		<div class="shape"></div>
+		<div class="shape"></div>
+		<div class="shape"></div>
+	</div>
+
 	<!-- File Error Modal -->
 	<div id="fileErrorModal" class="modal">
 		<div class="modal-dialog">
@@ -752,7 +1339,7 @@
 			toggleSubmitButton(true);
 
 			try {
-				const res = await fetch('https://api.sirajulhuda.com/api/v1/relief-assistance/create', {
+				const res = await fetch('https://api..com/api/v1/relief-assistance/create', {
 					method: 'POST',
 					body: formData
 				});
