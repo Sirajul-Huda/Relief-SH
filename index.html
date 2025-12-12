@@ -507,17 +507,17 @@
 				<div class="section-title">Documents / രേഖകൾ</div>
 				<div class="mb-2">
 					<label class="form-label">ID Proof (Aadhaar) <span class="text-danger">*</span><br><span class="bilingual">തിരിച്ചറിയൽ രേഖ</span></label>
-					<input type="file" class="form-control form-control-sm" id="idProofFile" name="id_proof" accept=".pdf,image/*" capture="environment" required>
+					<input type="file" class="form-control form-control-sm" id="idProofFile" name="id_proof" accept=".pdf,image/*" required>
 					<small class="text-muted">Upload PDF or take/upload a photo</small>
 				</div>
 				<div class="mb-2">
 					<label class="form-label">Request Letter <span class="text-danger">*</span><br><span class="bilingual">അപേക്ഷാ കത്ത്</span></label>
-					<input type="file" class="form-control form-control-sm" id="requestLetterFile" name="request_letter" accept=".pdf,image/*" capture="environment" required>
+					<input type="file" class="form-control form-control-sm" id="requestLetterFile" name="request_letter" accept=".pdf,image/*" required>
 					<small class="text-muted">Upload PDF or take/upload a photo</small>
 				</div>
 				<div class="mb-2">
 					<label class="form-label">Bank Passbook <span class="text-danger">*</span><br><span class="bilingual">ബാങ്ക് പാസ്ബുക്ക്</span></label>
-					<input type="file" class="form-control form-control-sm" id="bankPassbookFile" name="bank_passbook" accept=".pdf,image/*" capture="environment" required>
+					<input type="file" class="form-control form-control-sm" id="bankPassbookFile" name="bank_passbook" accept=".pdf,image/*" required>
 					<small class="text-muted">Upload PDF or take/upload a photo</small>
 				</div>
 
@@ -750,7 +750,7 @@
 			toggleSubmitButton(true);
 
 			try {
-				const res = await fetch('https://api.sirajulhuda.com/api/v1/relief-assistance/create', {
+				const res = await fetch('https://api..com/api/v1/relief-assistance/create', {
 					method: 'POST',
 					body: formData
 				});
