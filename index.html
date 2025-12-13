@@ -4,9 +4,12 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Relief Assistance Application</title>
+	<title>Apply for Relief Assistance | Sirajul Huda Educational Complex</title>
+	<meta name="description" content="Apply for relief assistance through Sirajul Huda to receive compassionate support rooted in humanity, integrity, and social responsibility for those in need.">
 	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/css/intlTelInput.css">
+	<link rel="icon" type="image/png" href="./fav.jpg">
+
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 		@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
@@ -816,7 +819,7 @@
 
 		/* File input hover text effect */
 		input[type="file"]:hover::after {
-			content: "Click or drag files here";
+			content: "";
 			position: absolute;
 			top: 50%;
 			left: 50%;
@@ -942,12 +945,14 @@
 							<option value="Other">Other / മറ്റുള്ളവ</option>
 						</select>
 					</div>
+					<div class="col-md-6">
+						<div class="mb-2">
+					<label class="form-label">House Name <span class="text-danger">*</span><br><span class="വീട്ടു പേര് ">വീട്ടു പേര് </span></label>
+					<input class="form-control form-control-sm" name="address" required>
+					</div>
 				</div>
 
-				<div class="mb-2">
-					<label class="form-label">Address <span class="text-danger">*</span><br><span class="bilingual">വിലാസം</span></label>
-					<textarea class="form-control form-control-sm" name="address" rows="2" required></textarea>
-				</div>
+
 
 				<div class="row g-2 mb-2">
 					<div class="col-md-6">
