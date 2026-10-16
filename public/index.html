@@ -651,8 +651,7 @@
 		}
 
 	/* Enhanced Conditional Input Animation */
-		#otherStatusContainer,
-		#familyMembersContainer {
+		#otherStatusContainer {
 			max-height: 0;
 			overflow: hidden;
 			opacity: 0;
@@ -661,8 +660,7 @@
 			transform: translateY(-10px);
 		}
 
-		#otherStatusContainer.show,
-		#familyMembersContainer.show {
+		#otherStatusContainer.show {
 			max-height: 200px;
 			opacity: 1;
 			margin-top: 20px;
@@ -851,6 +849,24 @@
 		::-webkit-scrollbar-thumb:hover {
 			background: linear-gradient(180deg, var(--primary-color), var(--secondary-color));
 		}
+
+		/* Applicant signature */
+		.sig-tabs { display: flex; gap: 6px; margin-bottom: 6px; }
+		.sig-tabs button {
+			flex: 1; border: 1px solid var(--secondary-color); background: #fff;
+			color: var(--primary-color); border-radius: 6px; padding: 5px 8px; font-size: 0.85rem;
+		}
+		.sig-tabs button.active { background: var(--secondary-color); color: #fff; }
+		.sig-pad-wrap { position: relative; }
+		#signaturePad {
+			width: 100%; height: 160px; display: block; background: #fff;
+			border: 2px dashed #9ca3af; border-radius: 8px; touch-action: none; cursor: crosshair;
+		}
+		.sig-pad-wrap .sig-hint {
+			position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+			color: #9ca3af; font-size: 0.9rem; pointer-events: none;
+		}
+		#signaturePreview { max-height: 120px; max-width: 100%; border: 1px solid #e5e7eb; border-radius: 6px; background: #fff; }
 	</style>
 </head>
 
@@ -989,36 +1005,15 @@
 				<div class="mb-3">
 					<label class="form-label">Select Applicant's Status <span class="text-danger">*</span><br>
 						<span class="bilingual">അപേക്ഷകന്റെ നില തിരഞ്ഞെടുക്കുക</span></label>
-					<div class="row g-3">
-						<div class="col-md-6">
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" name="applicant_status" value="Family" id="statusFamily">
-								<label class="form-check-label small" for="statusFamily">Family / കുടുംബം</label>
-							</div>
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" name="applicant_status" value="Orphan" id="statusOrphan">
-								<label class="form-check-label small" for="statusOrphan">Orphan / അനാഥൻ</label>
-							</div>
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" name="applicant_status" value="Single" id="statusSingle">
-								<label class="form-check-label small" for="statusSingle">Single / ഒറ്റയ്ക്ക്</label>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" name="applicant_status" value="Widow" id="statusWidow">
-								<label class="form-check-label small" for="statusWidow">Widow / വിധവ</label>
-							</div>
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" name="applicant_status" value="Chronic Patient" id="statusChronic">
-								<label class="form-check-label small" for="statusChronic">Chronic Patient / ദീർഘകാല രോഗി</label>
-							</div>
-							<div class="form-check">
-								<input class="form-check-input" type="checkbox" name="applicant_status" value="Other" id="statusOther">
-								<label class="form-check-label small" for="statusOther">Other / മറ്റുള്ളവ</label>
-							</div>
-						</div>
-					</div>
+					<select class="form-select form-select-sm" id="applicantStatusSelect" name="applicant_status" required>
+						<option value="">Select</option>
+						<option value="With Family">With Family / കുടുംബത്തോടൊപ്പം</option>
+						<option value="Widow">Widow / വിധവ</option>
+						<option value="Single">Single / ഒറ്റയ്ക്ക്</option>
+						<option value="Orphan">Orphan / അനാഥൻ</option>
+						<option value="Chronic Disease">Chronic Disease / ദീർഘകാല രോഗം</option>
+						<option value="Other">Other / മറ്റുള്ളവ</option>
+					</select>
 
 					<!-- Other Status Input -->
 					<div id="otherStatusContainer">
@@ -1028,11 +1023,11 @@
 							placeholder="e.g. Divorced, Disabled, Senior Citizen, etc." name="other_applicant_status">
 					</div>
 
-					<!-- Family Members Input (only shown when Family is checked) -->
-					<div id="familyMembersContainer">
+					<!-- Family Members Input (required for every status; the API needs family_members) -->
+					<div class="mt-3">
 						<label class="form-label">Number of Family Members <span class="text-danger">*</span><br>
 							<span class="bilingual">കുടുംബാംഗങ്ങളുടെ എണ്ണം</span></label>
-						<input type="number" class="form-control form-control-sm" id="familyMembersInput" name="family_members" min="1">
+						<input type="number" class="form-control form-control-sm" id="familyMembersInput" name="family_members" min="1" required>
 					</div>
 				</div>
 
@@ -1053,56 +1048,41 @@
 				<div class="section-title">Relief Details / സഹായത്തിന്റെ വിശദാംശങ്ങൾ</div>
 
 				<div class="mb-2">
-					<label class="form-label">Reason for Requesting Relief <span class="text-danger">*</span><br>
-						<span class="bilingual">സഹായം ആവശ്യപ്പെടാനുള്ള കാരണം</span></label>
-					<textarea class="form-control form-control-sm" name="reason" rows="2" required></textarea>
+					<label class="form-label">Purpose of Relief <span class="text-danger">*</span><br>
+						<span class="bilingual">സഹായത്തിന്റെ ആവശ്യം</span></label>
+					<!-- Values are sent comma-separated as relief_types, so they must not contain commas -->
+					<select class="form-select form-select-sm" id="reliefPurposeSelect" name="relief_purpose" required>
+						<option value="">Select</option>
+						<option value="Educational Aid">Educational Aid / വിദ്യാഭ്യാസ സഹായം</option>
+						<option value="Medical Aid">Medical Aid / ചികിത്സാ സഹായം</option>
+						<option value="House Construction">House Construction / വീട് നിർമ്മാണം</option>
+						<option value="House Repair / Renovation">House Repair / Renovation / വീട് അറ്റകുറ്റപ്പണി</option>
+						<option value="Rent Assistance">Rent Assistance / വാടക സഹായം</option>
+						<option value="Marriage Aid">Marriage Aid / വിവാഹ സഹായം</option>
+						<option value="Household Expenses">Household Expenses / ഗൃഹ ചെലവ്</option>
+						<option value="Food Kit / Ration">Food Kit / Ration / ഭക്ഷണ കിറ്റ് / റേഷൻ</option>
+						<option value="Debt Repayment">Debt Repayment / കടം വീട്ടൽ</option>
+						<option value="Funeral / Death Expenses">Funeral / Death Expenses / മരണാനന്തര ചെലവ്</option>
+						<option value="Orphan Support">Orphan Support / അനാഥ സംരക്ഷണം</option>
+						<option value="Widow Support">Widow Support / വിധവ സഹായം</option>
+						<option value="Support for Differently Abled (Wheelchair etc.)">Support for Differently Abled (Wheelchair, etc.) / ഭിന്നശേഷി സഹായം (വീൽചെയർ മുതലായവ)</option>
+						<option value="Self-Employment / Livelihood Support">Self-Employment / Livelihood Support / സ്വയംതൊഴിൽ / ഉപജീവന സഹായം</option>
+						<option value="Tailoring Machine">Tailoring Machine / തയ്യൽ മെഷീൻ</option>
+						<option value="Cow / Goat">Cow / Goat / പശു / ആട്</option>
+						<option value="Cycle">Cycle / സൈക്കിൾ</option>
+						<option value="Drinking Water / Well">Drinking Water / Well / കുടിവെള്ളം / കിണർ</option>
+						<option value="Toilet Construction">Toilet Construction / ശൗചാലയ നിർമ്മാണം</option>
+						<option value="Electricity Connection">Electricity Connection / വൈദ്യുതി കണക്ഷൻ</option>
+						<option value="Disaster / Emergency Relief">Disaster / Emergency Relief / ദുരന്ത / അടിയന്തര സഹായം</option>
+						<option value="Other">Other / മറ്റുള്ളവ</option>
+					</select>
 				</div>
 
 				<div class="mb-2">
-					<label class="form-label">Type of Relief Needed <span class="text-danger">*</span><br>
-						<span class="bilingual">ആവശ്യമായ സഹായം</span></label>
-					<div class="row g-2">
-						<div class="col-md-6">
-							<div class="form-check form-check-sm">
-								<input class="form-check-input" type="checkbox" name="reliefType" value="Financial Support" id="financial">
-								<label class="form-check-label small" for="financial">Financial Support / ധനസഹായം</label>
-							</div>
-							<div class="form-check form-check-sm">
-								<input class="form-check-input" type="checkbox" name="reliefType" value="Food Kit" id="foodKit">
-								<label class="form-check-label small" for="foodKit">Food Kit / ഭക്ഷണകിറ്റ്</label>
-							</div>
-							<div class="form-check form-check-sm">
-								<input class="form-check-input" type="checkbox" name="reliefType" value="Medical Assistance" id="medical">
-								<label class="form-check-label small" for="medical">Medical Assistance / ചികിത്സാ സഹായം</label>
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-check form-check-sm">
-								<input class="form-check-input" type="checkbox" name="reliefType" value="Education Support" id="education">
-								<label class="form-check-label small" for="education">Education Support / വിദ്യാഭ്യാസ സഹായം</label>
-							</div>
-							<div class="form-check form-check-sm">
-								<input class="form-check-input" type="checkbox" name="reliefType" value="Housing" id="housing">
-								<label class="form-check-label small" for="housing">Housing / Repair / വീട് നിർമ്മാണ-പരിപാലന സഹായം</label>
-							</div>
-							<div class="form-check form-check-sm">
-								<input class="form-check-input" type="checkbox" name="reliefType" value="Wheelchair" id="wheelchair">
-								<label class="form-check-label small" for="wheelchair">Wheelchair / വീൽചെയർ</label>
-							</div>
-							<div class="form-check form-check-sm">
-								<input class="form-check-input" type="checkbox" name="reliefType" value="Marriage Aid" id="marriage">
-								<label class="form-check-label small" for="marriage">Marriage Aid / വിവാഹ സഹായം</label>
-							</div>
-							<div class="form-check form-check-sm">
-								<input class="form-check-input" type="checkbox" name="reliefType" value="Household Expense" id="household">
-								<label class="form-check-label small" for="household">Household Expense / ഗൃഹ ചെലവ്</label>
-							</div>
-							<div class="form-check form-check-sm">
-								<input class="form-check-input" type="checkbox" name="reliefType" value="Other" id="other">
-								<label class="form-check-label small" for="other">Other / മറ്റു</label>
-							</div>
-						</div>
-					</div>
+					<label class="form-label">Purpose Details <span class="text-danger">*</span><br>
+						<span class="bilingual">ആവശ്യത്തിന്റെ വിശദാംശങ്ങൾ</span></label>
+					<textarea class="form-control form-control-sm" id="reasonInput" name="reason" rows="2" required
+						placeholder="e.g. Eye surgery at ___ hospital, Fees for B.Com 2nd year at ___ college"></textarea>
 				</div>
 
 				<!-- Documents -->
@@ -1151,6 +1131,30 @@
 					</div>
 				</div>
 
+				<!-- Applicant signature -->
+				<div class="mb-2">
+					<label class="form-label">Applicant's Signature <span class="text-danger">*</span><br>
+						<span class="bilingual">അപേക്ഷകന്റെ ഒപ്പ്</span></label>
+					<div class="sig-tabs">
+						<button type="button" id="sigDrawTab" class="active">Sign here / ഇവിടെ ഒപ്പിടുക</button>
+						<button type="button" id="sigUploadTab">Upload photo / ഫോട്ടോ</button>
+					</div>
+					<div id="sigDrawPanel">
+						<div class="sig-pad-wrap">
+							<canvas id="signaturePad"></canvas>
+							<div class="sig-hint" id="sigHint">Sign with your finger or mouse</div>
+						</div>
+						<div class="text-end mt-1">
+							<button type="button" class="btn btn-outline-secondary btn-sm" id="sigClearBtn">Clear / മായ്ക്കുക</button>
+						</div>
+					</div>
+					<div id="sigUploadPanel" class="d-none">
+						<input type="file" class="form-control form-control-sm" id="signatureFile" accept="image/*">
+						<small class="text-muted">A clear photo of your signature on white paper</small>
+						<div class="mt-2"><img id="signaturePreview" class="d-none" alt="Signature preview"></div>
+					</div>
+				</div>
+
 				<div class="mb-3">
 					<label class="form-label">Date <span class="text-danger">*</span></label>
 					<input type="date" class="form-control form-control-sm" name="application_date" style="max-width: 200px;" required>
@@ -1173,36 +1177,18 @@
 		// Set today's date
 		document.querySelector('input[name="application_date"]').valueAsDate = new Date();
 
-		// === Other Status Input Show/Hide ===
-		const otherStatusCheckbox = document.getElementById('statusOther');
+		// === Applicant Status: Other Input Show/Hide ===
+		const applicantStatusSelect = document.getElementById('applicantStatusSelect');
 		const otherStatusContainer = document.getElementById('otherStatusContainer');
 		const otherStatusInput = document.getElementById('otherStatusInput');
-
-		otherStatusCheckbox.addEventListener('change', function () {
-			if (this.checked) {
-				otherStatusContainer.classList.add('show');
-				setTimeout(() => otherStatusInput.focus(), 100);
-			} else {
-				otherStatusContainer.classList.remove('show');
-				otherStatusInput.value = '';
-			}
-		});
-
-		// === Family Members Input Show/Hide ===
-		const familyStatusCheckbox = document.getElementById('statusFamily');
-		const familyMembersContainer = document.getElementById('familyMembersContainer');
 		const familyMembersInput = document.getElementById('familyMembersInput');
 
-		familyStatusCheckbox.addEventListener('change', function () {
-			if (this.checked) {
-				familyMembersContainer.classList.add('show');
-				familyMembersInput.setAttribute('required', 'required');
-				setTimeout(() => familyMembersInput.focus(), 100);
-			} else {
-				familyMembersContainer.classList.remove('show');
-				familyMembersInput.removeAttribute('required');
-				familyMembersInput.value = '';
-			}
+		applicantStatusSelect.addEventListener('change', function () {
+			const isOther = this.value === 'Other';
+			otherStatusContainer.classList.toggle('show', isOther);
+			otherStatusInput.toggleAttribute('required', isOther);
+			if (isOther) setTimeout(() => otherStatusInput.focus(), 100);
+			else otherStatusInput.value = '';
 		});
 
 		// === File Validation ===
@@ -1290,32 +1276,177 @@
 		}
 
 		// === Form Submission ===
+
+		// === Applicant signature: draw on the pad or upload a photo ===
+		const signature = (() => {
+			const canvas = document.getElementById('signaturePad');
+			const ctx = canvas.getContext('2d');
+			const hint = document.getElementById('sigHint');
+			const fileInput = document.getElementById('signatureFile');
+			const preview = document.getElementById('signaturePreview');
+			const drawTab = document.getElementById('sigDrawTab');
+			const uploadTab = document.getElementById('sigUploadTab');
+			let mode = 'draw';
+			let drawn = false;
+			let drawing = false;
+			let last = null;
+
+			function sizeCanvas() {
+				if (drawn) return; // resizing wipes the drawing
+				const ratio = window.devicePixelRatio || 1;
+				canvas.width = canvas.clientWidth * ratio;
+				canvas.height = canvas.clientHeight * ratio;
+				ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+				ctx.lineWidth = 2.2;
+				ctx.lineCap = 'round';
+				ctx.lineJoin = 'round';
+				ctx.strokeStyle = '#111827';
+			}
+
+			function point(e) {
+				const rect = canvas.getBoundingClientRect();
+				return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+			}
+
+			canvas.addEventListener('pointerdown', e => {
+				drawing = true;
+				last = point(e);
+				canvas.setPointerCapture(e.pointerId);
+				ctx.beginPath();
+				ctx.arc(last.x, last.y, ctx.lineWidth / 2, 0, Math.PI * 2);
+				ctx.fillStyle = ctx.strokeStyle;
+				ctx.fill();
+				drawn = true;
+				hint.classList.add('d-none');
+			});
+			canvas.addEventListener('pointermove', e => {
+				if (!drawing) return;
+				const p = point(e);
+				ctx.beginPath();
+				ctx.moveTo(last.x, last.y);
+				ctx.lineTo(p.x, p.y);
+				ctx.stroke();
+				last = p;
+			});
+			['pointerup', 'pointercancel', 'pointerleave'].forEach(t =>
+				canvas.addEventListener(t, () => { drawing = false; }));
+
+			function clear() {
+				drawn = false;
+				ctx.clearRect(0, 0, canvas.width, canvas.height);
+				hint.classList.remove('d-none');
+				sizeCanvas();
+			}
+
+			function setMode(next) {
+				mode = next;
+				drawTab.classList.toggle('active', next === 'draw');
+				uploadTab.classList.toggle('active', next === 'upload');
+				document.getElementById('sigDrawPanel').classList.toggle('d-none', next !== 'draw');
+				document.getElementById('sigUploadPanel').classList.toggle('d-none', next !== 'upload');
+				if (next === 'draw') sizeCanvas();
+			}
+
+			fileInput.addEventListener('change', () => {
+				const file = fileInput.files[0];
+				if (!file) { preview.classList.add('d-none'); return; }
+				preview.src = URL.createObjectURL(file);
+				preview.classList.remove('d-none');
+			});
+
+			drawTab.addEventListener('click', () => setMode('draw'));
+			uploadTab.addEventListener('click', () => setMode('upload'));
+			document.getElementById('sigClearBtn').addEventListener('click', clear);
+			window.addEventListener('resize', sizeCanvas);
+			sizeCanvas();
+
+			// A drawn signature is sent as a PNG on a white background. An
+			// uploaded photo is re-encoded through a canvas (scaled down to
+			// 1200px), so any photo the phone takes arrives as a small JPEG.
+			function toBlob() {
+				if (mode === 'draw') {
+					if (!drawn) return Promise.resolve(null);
+					const out = document.createElement('canvas');
+					out.width = canvas.width;
+					out.height = canvas.height;
+					const o = out.getContext('2d');
+					o.fillStyle = '#fff';
+					o.fillRect(0, 0, out.width, out.height);
+					o.drawImage(canvas, 0, 0);
+					return new Promise(res => out.toBlob(b => res(b && { blob: b, name: 'signature.png' }), 'image/png'));
+				}
+				const file = fileInput.files[0];
+				if (!file) return Promise.resolve(null);
+				return new Promise(res => {
+					const img = new Image();
+					img.onload = () => {
+						const scale = Math.min(1, 1200 / Math.max(img.width, img.height));
+						const out = document.createElement('canvas');
+						out.width = Math.round(img.width * scale);
+						out.height = Math.round(img.height * scale);
+						const o = out.getContext('2d');
+						o.fillStyle = '#fff';
+						o.fillRect(0, 0, out.width, out.height);
+						o.drawImage(img, 0, 0, out.width, out.height);
+						out.toBlob(b => res(b && { blob: b, name: 'signature.jpg' }), 'image/jpeg', 0.9);
+					};
+					img.onerror = () => res(null);
+					img.src = URL.createObjectURL(file);
+				});
+			}
+
+			function reset() {
+				fileInput.value = '';
+				preview.classList.add('d-none');
+				clear();
+				setMode('draw');
+			}
+
+			return { toBlob, reset };
+		})();
+
 		document.getElementById('reliefForm').addEventListener('submit', async function (e) {
 			e.preventDefault();
 
 			// Validate Applicant Status
-			const statusCheckboxes = document.querySelectorAll('input[name="applicant_status"]:checked');
-			if (statusCheckboxes.length === 0) {
-				showAlert('Please select at least one Applicant Status.', 'danger');
+			const applicantStatus = applicantStatusSelect.value;
+			if (!applicantStatus) {
+				showAlert('Please select the Applicant Status.', 'danger');
+				applicantStatusSelect.focus();
 				return;
 			}
-			if (otherStatusCheckbox.checked && !otherStatusInput.value.trim()) {
+			if (applicantStatus === 'Other' && !otherStatusInput.value.trim()) {
 				showAlert('Please specify the "Other" status.', 'danger');
 				otherStatusInput.focus();
 				return;
 			}
 
-			// Validate Family Members if Family is checked
-			if (familyStatusCheckbox.checked && !familyMembersInput.value) {
+			// Validate Family Members
+			if (!familyMembersInput.value) {
 				showAlert('Please enter the number of family members.', 'danger');
 				familyMembersInput.focus();
 				return;
 			}
 
-			// Validate Relief Types
-			const reliefTypes = document.querySelectorAll('input[name="reliefType"]:checked');
-			if (reliefTypes.length === 0) {
-				showAlert('Please select at least one type of relief needed.', 'danger');
+			// Validate Purpose and Purpose Details
+			const reliefPurposeSelect = document.getElementById('reliefPurposeSelect');
+			const reasonInput = document.getElementById('reasonInput');
+			if (!reliefPurposeSelect.value) {
+				showAlert('Please select the purpose of relief.', 'danger');
+				reliefPurposeSelect.focus();
+				return;
+			}
+			if (!reasonInput.value.trim()) {
+				showAlert('Please enter the purpose details.', 'danger');
+				reasonInput.focus();
+				return;
+			}
+
+			// Validate Signature
+			const signatureFile = await signature.toBlob();
+			if (!signatureFile) {
+				showAlert('Please sign the application (draw your signature or upload a photo of it).', 'danger');
+				document.getElementById('signaturePad').scrollIntoView({ behavior: 'smooth', block: 'center' });
 				return;
 			}
 
@@ -1326,30 +1457,25 @@
 				if (el && el.value) formData.append(f, el.value);
 			});
 
-			// Family Members (only if Family checkbox is checked)
-			if (familyStatusCheckbox.checked && familyMembersInput.value) {
-				formData.append('family_members', familyMembersInput.value);
-			}
+			formData.append('family_members', familyMembersInput.value);
 
 			// Contact & Referrer (Indian numbers with +91 prefix)
 			if (this.elements['contact_number'].value) formData.append('contact_number', '+91' + this.elements['contact_number'].value);
 			if (this.elements['referrer_mobile']?.value) formData.append('referrer_mobile', '+91' + this.elements['referrer_mobile'].value);
 
-			// Relief Types
-			formData.append('relief_types', Array.from(reliefTypes).map(cb => cb.value).join(','));
+			// Relief Purpose (single value)
+			formData.append('relief_types', reliefPurposeSelect.value);
 
-			// Applicant Status
-			let statusValues = Array.from(statusCheckboxes).map(cb => cb.value);
-			if (otherStatusCheckbox.checked && otherStatusInput.value.trim()) {
-				statusValues.push(otherStatusInput.value.trim());
-			}
-			formData.append('applicant_status', statusValues.join(','));
+			// Applicant Status (typed text when "Other")
+			formData.append('applicant_status', applicantStatus === 'Other' ? otherStatusInput.value.trim() : applicantStatus);
 
 			// Files
 			['id_proof', 'request_letter', 'bank_passbook'].forEach(key => {
 				const file = this.elements[key]?.files[0];
 				if (file) formData.append(key, file);
 			});
+
+			formData.append('applicant_signature', signatureFile.blob, signatureFile.name);
 
 			formData.append('declaration_verified', 'true');
 			const dateVal = this.elements['application_date'].value;
@@ -1367,11 +1493,12 @@
 				if (res.ok) {
 					showSuccessModal();
 					this.reset();
+					signature.reset();
 					document.querySelector('input[name="application_date"]').valueAsDate = new Date();
-					otherStatusContainer.classList.remove('show');
-					familyMembersContainer.classList.remove('show');
+					// Hide the Other status input and clear its required flag
+					applicantStatusSelect.dispatchEvent(new Event('change'));
 				} else {
-					showAlert('Error: ' + (data.message || 'Submission failed'), 'danger');
+					showAlert('Error: ' + ((typeof data.detail === 'string' && data.detail) || data.message || 'Submission failed'), 'danger');
 				}
 			} catch (err) {
 				showAlert('Network error. Please try again.', 'danger');
