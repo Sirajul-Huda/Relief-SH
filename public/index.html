@@ -851,12 +851,6 @@
 		}
 
 		/* Applicant signature */
-		.sig-tabs { display: flex; gap: 6px; margin-bottom: 6px; }
-		.sig-tabs button {
-			flex: 1; border: 1px solid var(--secondary-color); background: #fff;
-			color: var(--primary-color); border-radius: 6px; padding: 5px 8px; font-size: 0.85rem;
-		}
-		.sig-tabs button.active { background: var(--secondary-color); color: #fff; }
 		.sig-pad-wrap { position: relative; }
 		#signaturePad {
 			width: 100%; height: 160px; display: block; background: #fff;
@@ -866,7 +860,6 @@
 			position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
 			color: #9ca3af; font-size: 0.9rem; pointer-events: none;
 		}
-		#signaturePreview { max-height: 120px; max-width: 100%; border: 1px solid #e5e7eb; border-radius: 6px; background: #fff; }
 	</style>
 </head>
 
@@ -1093,8 +1086,8 @@
 					<small class="text-muted">Upload PDF, Document or take/upload a photo</small>
 				</div>
 				<div class="mb-2">
-					<label class="form-label">Request Letter <span class="text-danger">*</span><br><span class="bilingual">അപേക്ഷാ കത്ത്</span></label>
-					<input type="file" class="form-control form-control-sm" id="requestLetterFile" name="request_letter" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*" required>
+					<label class="form-label">Request Letter <span class="text-muted">(Optional)</span><br><span class="bilingual">അപേക്ഷാ കത്ത്</span></label>
+					<input type="file" class="form-control form-control-sm" id="requestLetterFile" name="request_letter" accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,image/*">
 					<small class="text-muted">Upload PDF, Document or take/upload a photo</small>
 				</div>
 				<div class="mb-2">
@@ -1135,23 +1128,12 @@
 				<div class="mb-2">
 					<label class="form-label">Applicant's Signature <span class="text-danger">*</span><br>
 						<span class="bilingual">അപേക്ഷകന്റെ ഒപ്പ്</span></label>
-					<div class="sig-tabs">
-						<button type="button" id="sigDrawTab" class="active">Sign here / ഇവിടെ ഒപ്പിടുക</button>
-						<button type="button" id="sigUploadTab">Upload photo / ഫോട്ടോ</button>
+					<div class="sig-pad-wrap">
+						<canvas id="signaturePad"></canvas>
+						<div class="sig-hint" id="sigHint">Sign with your finger or mouse</div>
 					</div>
-					<div id="sigDrawPanel">
-						<div class="sig-pad-wrap">
-							<canvas id="signaturePad"></canvas>
-							<div class="sig-hint" id="sigHint">Sign with your finger or mouse</div>
-						</div>
-						<div class="text-end mt-1">
-							<button type="button" class="btn btn-outline-secondary btn-sm" id="sigClearBtn">Clear / മായ്ക്കുക</button>
-						</div>
-					</div>
-					<div id="sigUploadPanel" class="d-none">
-						<input type="file" class="form-control form-control-sm" id="signatureFile" accept="image/*">
-						<small class="text-muted">A clear photo of your signature on white paper</small>
-						<div class="mt-2"><img id="signaturePreview" class="d-none" alt="Signature preview"></div>
+					<div class="text-end mt-1">
+						<button type="button" class="btn btn-outline-secondary btn-sm" id="sigClearBtn">Clear / മായ്ക്കുക</button>
 					</div>
 				</div>
 
@@ -1277,16 +1259,11 @@
 
 		// === Form Submission ===
 
-		// === Applicant signature: draw on the pad or upload a photo ===
+		// === Applicant signature: draw on the pad ===
 		const signature = (() => {
 			const canvas = document.getElementById('signaturePad');
 			const ctx = canvas.getContext('2d');
 			const hint = document.getElementById('sigHint');
-			const fileInput = document.getElementById('signatureFile');
-			const preview = document.getElementById('signaturePreview');
-			const drawTab = document.getElementById('sigDrawTab');
-			const uploadTab = document.getElementById('sigUploadTab');
-			let mode = 'draw';
 			let drawn = false;
 			let drawing = false;
 			let last = null;
@@ -1338,71 +1315,24 @@
 				sizeCanvas();
 			}
 
-			function setMode(next) {
-				mode = next;
-				drawTab.classList.toggle('active', next === 'draw');
-				uploadTab.classList.toggle('active', next === 'upload');
-				document.getElementById('sigDrawPanel').classList.toggle('d-none', next !== 'draw');
-				document.getElementById('sigUploadPanel').classList.toggle('d-none', next !== 'upload');
-				if (next === 'draw') sizeCanvas();
-			}
-
-			fileInput.addEventListener('change', () => {
-				const file = fileInput.files[0];
-				if (!file) { preview.classList.add('d-none'); return; }
-				preview.src = URL.createObjectURL(file);
-				preview.classList.remove('d-none');
-			});
-
-			drawTab.addEventListener('click', () => setMode('draw'));
-			uploadTab.addEventListener('click', () => setMode('upload'));
 			document.getElementById('sigClearBtn').addEventListener('click', clear);
 			window.addEventListener('resize', sizeCanvas);
 			sizeCanvas();
 
-			// A drawn signature is sent as a PNG on a white background. An
-			// uploaded photo is re-encoded through a canvas (scaled down to
-			// 1200px), so any photo the phone takes arrives as a small JPEG.
+			// The drawn signature is sent as a PNG on a white background.
 			function toBlob() {
-				if (mode === 'draw') {
-					if (!drawn) return Promise.resolve(null);
-					const out = document.createElement('canvas');
-					out.width = canvas.width;
-					out.height = canvas.height;
-					const o = out.getContext('2d');
-					o.fillStyle = '#fff';
-					o.fillRect(0, 0, out.width, out.height);
-					o.drawImage(canvas, 0, 0);
-					return new Promise(res => out.toBlob(b => res(b && { blob: b, name: 'signature.png' }), 'image/png'));
-				}
-				const file = fileInput.files[0];
-				if (!file) return Promise.resolve(null);
-				return new Promise(res => {
-					const img = new Image();
-					img.onload = () => {
-						const scale = Math.min(1, 1200 / Math.max(img.width, img.height));
-						const out = document.createElement('canvas');
-						out.width = Math.round(img.width * scale);
-						out.height = Math.round(img.height * scale);
-						const o = out.getContext('2d');
-						o.fillStyle = '#fff';
-						o.fillRect(0, 0, out.width, out.height);
-						o.drawImage(img, 0, 0, out.width, out.height);
-						out.toBlob(b => res(b && { blob: b, name: 'signature.jpg' }), 'image/jpeg', 0.9);
-					};
-					img.onerror = () => res(null);
-					img.src = URL.createObjectURL(file);
-				});
+				if (!drawn) return Promise.resolve(null);
+				const out = document.createElement('canvas');
+				out.width = canvas.width;
+				out.height = canvas.height;
+				const o = out.getContext('2d');
+				o.fillStyle = '#fff';
+				o.fillRect(0, 0, out.width, out.height);
+				o.drawImage(canvas, 0, 0);
+				return new Promise(res => out.toBlob(b => res(b && { blob: b, name: 'signature.png' }), 'image/png'));
 			}
 
-			function reset() {
-				fileInput.value = '';
-				preview.classList.add('d-none');
-				clear();
-				setMode('draw');
-			}
-
-			return { toBlob, reset };
+			return { toBlob, reset: clear };
 		})();
 
 		document.getElementById('reliefForm').addEventListener('submit', async function (e) {
@@ -1445,7 +1375,7 @@
 			// Validate Signature
 			const signatureFile = await signature.toBlob();
 			if (!signatureFile) {
-				showAlert('Please sign the application (draw your signature or upload a photo of it).', 'danger');
+				showAlert('Please sign the application in the signature box.', 'danger');
 				document.getElementById('signaturePad').scrollIntoView({ behavior: 'smooth', block: 'center' });
 				return;
 			}
